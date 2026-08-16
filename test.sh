@@ -2,7 +2,7 @@
 
 output=$(./app.sh)
 
-if [ "$output" = "application is running" ] 
+if [ "$output" = "something else" ] 
 then
     echo "TEST PASSED"
 else
