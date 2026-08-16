@@ -17,3 +17,7 @@ jobs:
         run: |
           chmod +x app.sh test.sh
           ./test.sh
+      - name: Deploy application
+        run: |
+          chmod +x deploy.sh
+          ./deploy.sh
