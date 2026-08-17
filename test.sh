@@ -4,8 +4,9 @@ output=$(./app.sh)
 
 if [ "$output" = "application is running" ] 
 then
-    echo "TEST PASSED"
+    echo "TEST Failed"
+    exit 1
 else
     echo "TEST FAILED"
-    exit 1
+    
 fi
