@@ -31,5 +31,12 @@ pipeline {
                 sh './deploy.sh'
             }
         }
+
+        stage('Package') {
+            steps {
+                sh 'tar -czf ci-practice.tar.gz app.sh deploy.sh test.sh server'
+                archiveArtifacts artifacts: 'ci-practice.tar.gz'
+            }
+        }
     }
 }
