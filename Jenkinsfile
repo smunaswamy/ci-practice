@@ -2,26 +2,32 @@
 pipeline {
     agent any
 
+    environment {
+        APP_ENV = 'staging'
+    }
+
     stages {
         stage('Test') {
             steps {
                 sh './test.sh'
             }
         }
-       
+
         stage('Credential Test') {
-           steps {
-             withCredentials([usernamePassword(
-                 credentialsId: 'demo-credential',
-                 usernameVariable: 'DEMO_USER',
-                 passwordVariable: 'DEMO_PASS'
-        )])     {
-                 sh 'echo "Username is $DEMO_USER"'
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'demo-credential',
+                    usernameVariable: 'DEMO_USER',
+                    passwordVariable: 'DEMO_PASS'
+                )]) {
+                    sh 'echo "Username is $DEMO_USER"'
+                }
+            }
         }
-    }
-}
+
         stage('Deploy') {
             steps {
+                sh 'echo "Deploying to $APP_ENV"'
                 sh './deploy.sh'
             }
         }
