@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     environment {
-        APP_ENV = 'staging'
+        APP_ENV = "${params.APP_ENV}"
     }
 
     stages {
