@@ -1,5 +1,4 @@
-###################################
-
+// Jenkins CI/CD practice
 pipeline {
     agent any
 
