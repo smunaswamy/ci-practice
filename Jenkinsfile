@@ -1,4 +1,5 @@
 // Jenkins CI/CD practice
+
 pipeline {
     agent {
         label 'linux-agent'
@@ -9,34 +10,29 @@ pipeline {
     }
 
     stages {
-        stage('Test') {
-            steps {
-                sh './test.sh'
-            }
-        }
-     stage('Checks') {
-        parallel {
-           stage('Unit Test') {
-              steps {
-                 sh './test.sh'
-            }
-        }
- 
-     stage('Security Check') {
-         steps {
-            sh 'echo "Running security check"'
-         }
-      }
-  }
+        stage('Checks') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        sh './test.sh'
+                    }
+                }
 
-}
-     stage('Credential Test') {
-          steps {
-              withCredentials([usernamePassword(
-               credentialsId: 'demo-credential',
-               usernameVariable: 'DEMO_USER',
-               passwordVariable: 'DEMO_PASS'
-             )]) {
+                stage('Security Check') {
+                    steps {
+                        sh 'echo "Running security check"'
+                    }
+                }
+            }
+        }
+
+        stage('Credential Test') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'demo-credential',
+                    usernameVariable: 'DEMO_USER',
+                    passwordVariable: 'DEMO_PASS'
+                )]) {
                     sh 'echo "Username is $DEMO_USER"'
                 }
             }
@@ -46,7 +42,6 @@ pipeline {
             when {
                 environment name: 'APP_ENV', value: 'staging'
             }
-
             steps {
                 sh 'echo "Deploying to $APP_ENV"'
                 sh './deploy.sh'
@@ -62,36 +57,35 @@ pipeline {
 
         stage('Production Approval') {
             when {
-               environment name: 'APP_ENV', value: 'production'
-            }    
-
+                environment name: 'APP_ENV', value: 'production'
+            }
             steps {
                 input message: 'Deploy to production?', ok: 'Deploy'
-           }
+            }
         }
 
-       stage('Production Deploy') {
-           when {
-              environment name: 'APP_ENV', value: 'production'
-           }
-
-           steps {
-              sh 'echo "Deploying to production"'
-              sh './deploy.sh'
-                }
-           }  
-    }
-post {
-    success {
-        echo 'Pipeline completed successfully'
+        stage('Production Deploy') {
+            when {
+                environment name: 'APP_ENV', value: 'production'
+            }
+            steps {
+                sh 'echo "Deploying to production"'
+                sh './deploy.sh'
+            }
+        }
     }
 
-    failure {
-        echo 'Pipeline failed'
-    }
+    post {
+        success {
+            echo 'Pipeline completed successfully'
+        }
 
-    always {
-        echo 'Pipeline finished'
+        failure {
+            echo 'Pipeline failed'
+        }
+
+        always {
+            echo 'Pipeline finished'
+        }
     }
-}
 }
