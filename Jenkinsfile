@@ -1,6 +1,8 @@
 // Jenkins CI/CD practice
 pipeline {
-    agent any
+    agent {
+        label 'linux-agent'
+    }
 
     environment {
         APP_ENV = "${params.APP_ENV}"
