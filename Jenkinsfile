@@ -42,12 +42,24 @@ pipeline {
                 sh './app.sh'
             }
         }
-        stage('Deploy') {
+        stage('Deploy QA') {
             when {
-                environment name: 'APP_ENV', value: 'staging'
+               environment name: 'APP_ENV', value: 'qa'
+            }
+        steps {
+            sh 'echo "Deploying to QA"'
+            sh './deploy.sh'
+           }
+        }
+
+
+
+        stage('Deploy Staging') {
+            when {
+               environment name: 'APP_ENV', value: 'staging'
             }
             steps {
-                sh 'echo "Deploying to $APP_ENV"'
+                sh 'echo "Deploying to Staging"'
                 sh './deploy.sh'
             }
         }
