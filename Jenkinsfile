@@ -14,14 +14,29 @@ pipeline {
                 sh './test.sh'
             }
         }
+     stage('Checks') {
+        parallel {
+           stage('Unit Test') {
+              steps {
+                 sh './test.sh'
+            }
+        }
+ 
+     stage('Security Check') {
+         steps {
+            sh 'echo "Running security check"'
+         }
+      }
+  }
 
-        stage('Credential Test') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'demo-credential',
-                    usernameVariable: 'DEMO_USER',
-                    passwordVariable: 'DEMO_PASS'
-                )]) {
+}
+     stage('Credential Test') {
+          steps {
+              withCredentials([usernamePassword(
+               credentialsId: 'demo-credential',
+               usernameVariable: 'DEMO_USER',
+               passwordVariable: 'DEMO_PASS'
+             )]) {
                     sh 'echo "Username is $DEMO_USER"'
                 }
             }
