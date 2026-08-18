@@ -28,6 +28,10 @@ pipeline {
         }
 
         stage('Deploy') {
+            when {
+                environment name: 'APP_ENV', value: 'staging'
+            }
+
             steps {
                 sh 'echo "Deploying to $APP_ENV"'
                 sh './deploy.sh'
