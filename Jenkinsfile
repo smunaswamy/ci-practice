@@ -44,5 +44,26 @@ pipeline {
                 archiveArtifacts artifacts: 'ci-practice.tar.gz'
             }
         }
+
+        stage('Production Approval') {
+            when {
+               environment name: 'APP_ENV', value: 'production'
+            }    
+
+            steps {
+                input message: 'Deploy to production?', ok: 'Deploy'
+           }
+        }
+
+       stage('Production Deploy') {
+           when {
+              environment name: 'APP_ENV', value: 'production'
+           }
+
+           steps {
+              sh 'echo "Deploying to production"'
+              sh './deploy.sh'
+                }
+           }  
     }
 }
