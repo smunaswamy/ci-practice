@@ -37,7 +37,11 @@ pipeline {
                 }
             }
         }
-
+        stage('Build') {
+            steps {
+                sh './app.sh'
+            }
+        }
         stage('Deploy') {
             when {
                 environment name: 'APP_ENV', value: 'staging'
